@@ -1,0 +1,12 @@
+<form method="POST">
+  Distributor:
+  <select name="distributor_id">
+    {% for d in distributors %}
+      <option value="{{d.id}}">{{d.name}}</option>
+    {% endfor %}
+  </select><br>
+  Date: <input type="date" name="txn_date" required><br>
+  Amount: <input name="amount" required><br>
+  Method: <input name="method" value="Cash"><br>
+  <button type="submit">Add Payment</button>
+</form>

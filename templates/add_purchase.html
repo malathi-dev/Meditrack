@@ -1,0 +1,13 @@
+<form method="POST">
+  Distributor:
+  <select name="distributor_id">
+    {% for d in distributors %}
+      <option value="{{d.id}}">{{d.name}}</option>
+    {% endfor %}
+  </select><br>
+  Invoice No: <input name="invoice_no" required><br>
+  Date: <input type="date" name="txn_date" required><br>
+  Total Amount: <input name="total_amount" required><br>
+  Remarks: <input name="remarks"><br>
+  <button type="submit">Add Purchase</button>
+</form>

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="modal show d-block" tabindex="-1">
+<div class="modal-dialog modal-dialog-centered">
+<div class="modal-content p-4">
+
+<h4 class="text-center">Print Invoice</h4>
+<hr>
+
+{% for i in items %}
+<div class="d-flex justify-content-between">
+<span>{{ i.name }} (x{{ i.quantity }})</span>
+<span>₹{{ i.subtotal }}</span>
+</div>
+{% endfor %}
+
+<hr>
+
+<div class="d-flex justify-content-between fw-bold">
+<span>Total</span>
+<span>₹{{ grand_total }}</span>
+</div>
+
+<div class="text-center mt-4">
+<a href="/billing" class="btn btn-secondary">Cancel</a>
+<button onclick="window.print()" class="btn btn-success">
+Print Receipt
+</button>
+</div>
+
+</div>
+</div>
+</div>
+
+{% endblock %}

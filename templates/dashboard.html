@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h3 class="mb-4">Dashboard</h3>
+
+<div class="row g-4 mb-4">
+
+<div class="col-md-3">
+<div class="card p-3 text-center">
+<h6>Total Sales</h6>
+<h4>₹ {{ total_sales }}</h4>
+</div>
+</div>
+
+<div class="col-md-3">
+<div class="card p-3 text-center">
+<h6>Pending Payments</h6>
+<h4>₹ {{ pending }}</h4>
+</div>
+</div>
+{% if low_stock %}
+<div class="col-md-3">
+  <div class="card p-3 text-center">
+    <h6 class="text-danger fw-bold">⚠ Low Stock Alerts</h6>
+              {% for m in low_stock %}
+            <span class=" text-danger">{{ m.name }}
+                   - {{ m.stock }} left</span>
+      {% endfor %}
+  </div>
+</div>
+{% endif %}
+
+
+<!--div class="col-md-3">
+<div class="card p-3 text-center">
+<h6>Low Stock Alerts</h6>
+<h4>{{ low_stock_count }}</h4>
+</div>
+</div -->
+
+<div class="col-md-3">
+<div class="card p-3 text-center">
+<h6>Expiry Alerts</h6>
+<h4>{{ expiry_alerts|length }}</h4>
+</div>
+</div>
+
+</div>
+
+<div class="row">
+
+<div class="col-md-8">
+<div class="card p-3">
+<h5>Sales Overview</h5>
+<canvas id="salesChart"></canvas>
+</div>
+</div>
+
+<div class="col-md-4">
+<div class="card p-3">
+<h5>Top Selling Medicines</h5>
+<ul class="list-group list-group-flush">
+<li class="list-group-item">Paracetamol</li>
+<li class="list-group-item">Amoxicillin</li>
+<li class="list-group-item">Vitamin C</li>
+</ul>
+</div>
+</div>
+
+</div>
+
+<script>
+new Chart(document.getElementById('salesChart'), {
+type:'line',
+data:{
+labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+datasets:[{label:'Sales',data:[1200,2000,1500,3000,2500,3500,4000]}]
+}
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-4">
+
+    <!-- HEADER -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div>
+            <h4>Orderbook Dashboard</h4>
+            <small class="text-muted">Stock products which are in shortage</small>
+        </div>
+
+        <a href="#" class="btn btn-dark">
+            ⚙️ Settings
+        </a>
+    </div>
+
+    <!-- STATS CARDS -->
+    <div class="row mb-4">
+
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm border-primary">
+                <h6>Shortbook Items</h6>
+                <h4>{{ shortbook_count }}</h4>
+                <small class="text-muted">Stock shortage</small>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm border-danger">
+                <h6>Distributors</h6>
+                <h4>{{ distributors|length }}</h4>
+                <small class="text-muted">Available suppliers</small>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm border-warning">
+                <h6>Items in Cart</h6>
+                <h4>0</h4>
+                <small class="text-muted">Pending order</small>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm border-success">
+                <h6>Ordered Items</h6>
+                <h4>0</h4>
+                <small class="text-muted">Completed orders</small>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- DISTRIBUTORS -->
+    <div class="d-flex justify-content-between mb-2">
+        <h5>Local Distributors</h5>
+        <a href="#" class="text-primary">View All</a>
+    </div>
+
+    <div class="row">
+
+        {% for d in distributors %}
+        <div class="col-md-3 mb-3">
+
+            <div class="card shadow-sm p-3 h-100">
+
+                <!-- Avatar -->
+                <div class="d-flex align-items-center mb-2">
+                    <div class="bg-primary text-white rounded-circle p-2 me-2">
+                        {{ d.name[0] }}
+                    </div>
+                    <div>
+                        <strong>{{ d.name }}</strong><br>
+                        <small class="text-muted">{{ d.address }}</small>
+                    </div>
+                </div>
+
+                <!-- Contact -->
+                <small class="text-muted">📞 {{ d.contact }}</small>
+
+                <!-- Button -->
+                <div class="mt-3">
+                    <a href="{{ url_for('edit_distributor', dist_id=d.id) }}"
+                       class="btn btn-sm btn-outline-primary w-100">
+                       Order Now →
+                    </a>
+                </div>
+
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container mt-3">
+
+<!-- HEADER -->
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>Meditrack Orderbook</h4>
+    <a href="#" class="btn btn-primary">+ Add Distributor</a>
+</div>
+
+<!-- DASHBOARD CARDS -->
+<div class="row g-3 mb-4">
+
+<div class="col-md-3">
+    <div class="card p-3 shadow-sm border-primary">
+        <h6>Shortbook Items</h6>
+        <h4>0</h4>
+        <small class="text-muted">Stock items in shortage</small>
+    </div>
+</div>
+
+<div class="col-md-3">
+    <div class="card p-3 shadow-sm border-danger">
+        <h6>Distributors</h6>
+        <h4>{{ distributors|length }}</h4>
+        <small class="text-muted">Whom to order from</small>
+    </div>
+</div>
+
+<div class="col-md-3">
+    <div class="card p-3 shadow-sm border-warning">
+        <h6>Items in Cart</h6>
+        <h4>0</h4>
+        <small class="text-muted">Items finalized</small>
+    </div>
+</div>
+
+<div class="col-md-3">
+    <div class="card p-3 shadow-sm border-success">
+        <h6>Ordered Items</h6>
+        <h4>0</h4>
+        <small class="text-muted">Items in order</small>
+    </div>
+</div>
+
+</div>
+
+<!-- DISTRIBUTOR CARDS -->
+<div class="mb-4">
+    <h5>Local Distributors</h5>
+
+    <div class="d-flex gap-3 overflow-auto">
+
+        {% for d in distributors %}
+        <div class="card p-3 shadow-sm" style="min-width:250px;">
+            <h6>{{ d.name }}</h6>
+            <small class="text-muted">{{ d.address }}</small>
+
+            <div class="mt-2">
+                <small>Contact: {{ d.contact }}</small>
+            </div>
+
+            <a href="#" class="text-danger mt-2">Order Now →</a>
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+<!-- TABLE -->
+<div class="card shadow-sm p-3">
+
+<table class="table table-hover">
+<thead>
+<tr>
+<th>Name</th>
+<th>Contact</th>
+<th>Address</th>
+<th>GST</th>
+<th>Total Purchases</th>
+<th>Payments</th>
+<th>Balance</th>
+<th>Actions</th>
+</tr>
+</thead>
+
+<tbody>
+{% for d in distributors %}
+<tr>
+
+<td>{{ d.name }}</td>
+<td>{{ d.contact }}</td>
+<td>{{ d.address }}</td>
+<td>{{ d.gst_no }}</td>
+
+<td>₹{{ d.total_purchase }}</td>
+<td>₹{{ d.payments }}</td>
+
+<td>
+{% if d.balance > 0 %}
+<span class="text-danger fw-bold">₹{{ d.balance }}</span>
+{% else %}
+₹{{ d.balance }}
+{% endif %}
+</td>
+
+<td>
+<button class="btn btn-sm btn-outline-primary">View</button>
+<button class="btn btn-sm btn-outline-success">Purchase</button>
+<button class="btn btn-sm btn-outline-warning">Payment</button>
+</td>
+
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+{% endblock %}

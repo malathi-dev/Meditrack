@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h3 class="mb-0">Customers</h3>
+    <small class="text-muted">Manage customer profiles and credit history.</small>
+  </div>
+
+  <button class="btn btn-success" onclick="openPanel()">+ Add Customer</button>
+</div>
+
+<!-- SUMMARY CARDS -->
+<div class="row mb-4">
+  <div class="col-md-6">
+    <div class="card p-3 shadow-sm">
+      <small>Total Customers</small>
+      <h4>{{ customers|length }}</h4>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card p-3 shadow-sm">
+      <small>Total Credit (Udhaar)</small>
+      <h4 class="text-danger">₹ {{ total_credit }}</h4>
+    </div>
+  </div>
+</div>
+
+<!-- SEARCH -->
+<div class="card shadow-sm mb-3">
+  <div class="card-body">
+    <input type="text" id="searchInput" class="form-control" placeholder="Search name or phone...">
+  </div>
+</div>
+
+<!-- TABLE -->
+<div class="card shadow-sm">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0" id="customerTable">
+      <thead class="table-light">
+        <tr>
+          <th>Customer</th>
+          <th>Contact</th>
+          <th>Credit Balance</th>
+          <th>Total Purchases</th>
+          <th>Last Visit</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for c in customers %}
+        <tr>
+          <td>
+            <strong>{{ c.name }}</strong>
+          </td>
+
+          <td>
+            {{ c.phone }}<br>
+            <small class="text-muted">{{ c.email }}</small><br>
+            <small class="text-muted">{{ c.address }}</small>
+          </td>
+
+          <td>
+            {% if c.credit_balance|float > 0 %}
+              <span class="badge bg-danger">₹ {{ c.credit_balance }} Pending</span>
+            {% else %}
+              <span class="badge bg-success">Settled</span>
+            {% endif %}
+          </td>
+
+          <td>₹ {{ c.total_purchases }}</td>
+          <td>{{ c.last_visit }}</td>
+
+          <td>
+            <a href="/edit-customer/{{ c.id }}" class="btn btn-sm btn-warning">Edit</a>
+
+            <form action="/delete-customer/{{ c.id }}" method="POST" style="display:inline;">
+              <button class="btn btn-sm btn-danger"
+                      onclick="return confirm('Delete this customer?')">
+                Delete
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- RIGHT SIDE PANEL -->
+<div id="sidePanel" class="side-panel">
+  <div class="panel-header">
+    <h5>Add Customer</h5>
+    <button class="btn-close" onclick="closePanel()"></button>
+  </div>
+
+  <form method="POST" action="/add_customer" class="p-3">
+
+    <div class="mb-3">
+      <label>Name</label>
+      <input type="text" name="name" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label>Phone</label>
+      <input type="text" name="phone" class="form-control" required>
+    </div>
+
+    <div class="mb-3">
+      <label>Email</label>
+      <input type="email" name="email" class="form-control">
+    </div>
+
+    <div class="mb-3">
+      <label>Address</label>
+      <input type="text" name="address" class="form-control">
+    </div>
+
+    <button class="btn btn-success w-100">Add Customer</button>
+
+  </form>
+</div>
+
+<script>
+document.getElementById("searchInput").addEventListener("keyup", function() {
+  let value = this.value.toLowerCase();
+  let rows = document.querySelectorAll("#customerTable tbody tr");
+
+  rows.forEach(row => {
+    row.style.display = row.innerText.toLowerCase().includes(value) ? "" : "none";
+  });
+});
+
+function openPanel() {
+  document.getElementById("sidePanel").style.right = "0";
+}
+
+function closePanel() {
+  document.getElementById("sidePanel").style.right = "-500px";
+}
+</script>
+
+{% endblock %}

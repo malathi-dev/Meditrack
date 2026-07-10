@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-4">
+  <div class="card p-4 shadow-sm">
+    <h4>Edit Batch</h4>
+
+    <form method="POST">
+
+      <div class="mb-3">
+        <label>Medicine Name</label>
+        <input type="text" name="name" 
+               value="{{ medicine.name }}" 
+               class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label>Company</label>
+        <input type="text" name="company" 
+               value="{{ medicine.company }}" 
+               class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label>Batch No</label>
+        <input type="text" name="batch_no" 
+               value="{{ medicine.batch_no }}" 
+               class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label>Expiry Date</label>
+        <input type="date" name="expiry_date" 
+               value="{{ medicine.expiry_date }}" 
+               class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label>MRP (₹)</label>
+        <input type="number" step="0.01" name="price" 
+               value="{{ medicine.price }}" 
+               class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label>Stock</label>
+        <input type="number" name="stock" 
+               value="{{ medicine.stock }}" 
+               class="form-control" required>
+      </div>
+
+      <button class="btn btn-success w-100">Update Batch</button>
+
+      <a href="{{ url_for('inventory') }}" 
+         class="btn btn-secondary w-100 mt-2">
+         ⬅ Back
+      </a>
+
+    </form>
+  </div>
+</div>
+{% endblock %}

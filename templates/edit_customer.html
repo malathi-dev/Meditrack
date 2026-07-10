@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Customer</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-4">
+
+<h3>Edit Customer</h3>
+
+<form method="POST">
+
+    <div class="mb-3">
+        <label>Customer Name</label>
+        <input type="text" name="name" class="form-control"
+               value="{{ customer.name }}" required>
+    </div>
+
+    <div class="mb-3">
+        <label>Contact</label>
+        <input type="text" name="contact" class="form-control"
+               value="{{ customer.contact }}">
+    </div>
+
+    <div class="mb-3">
+        <label>Credit Balance</label>
+        <input type="number" step="0.01" name="credit_balance"
+               class="form-control"
+               value="{{ customer.credit_balance }}">
+    </div>
+
+    <div class="mb-3">
+        <label>Total Purchases</label>
+        <input type="number" step="0.01" name="total_purchases"
+               class="form-control"
+               value="{{ customer.total_purchases }}">
+    </div>
+
+    <div class="mb-3">
+        <label>Last Visit</label>
+        <input type="date" name="last_visit"
+               class="form-control"
+               value="{{ customer.last_visit }}">
+    </div>
+
+    <button type="submit" class="btn btn-success">Update</button>
+    <a href="{{ url_for('customers') }}" class="btn btn-secondary">Cancel</a>
+
+</form>
+
+</body>
+</html>

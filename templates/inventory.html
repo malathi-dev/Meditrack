@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4>📦 Inventory</h4>
+
+    <!-- Add Stock Button -->
+    <button class="btn btn-success"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#addBatchCanvas">
+        + Add Stock
+    </button>
+</div>
+<div class="row mb-4">
+
+  <div class="col-md-3">
+    <div class="card shadow-sm p-3">
+      <h6>Total Products</h6>
+      <h4>{{ total_products }}</h4>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card shadow-sm p-3">
+      <h6>Total Stock Value</h6>
+      <h4>₹{{ total_value }}</h4>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card shadow-sm p-3">
+      <h6>Low Stock Items</h6>
+      <h4>{{ low_stock|length }}</h4>
+    </div>
+  </div>
+
+  <div class="col-md-3">
+    <div class="card shadow-sm p-3">
+      <h6>Expired Batches</h6>
+      <h4>{{ expired_batches|length }}</h4>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- Low Stock Alerts -->
+{% if low_stock %}
+<div class="alert alert-danger shadow-sm">
+    <strong>⚠ Low Stock:</strong>
+    {% for m in low_stock %}
+        {{ m.name }} ({{ m.stock }} left){% if not loop.last %}, {% endif %}
+    {% endfor %}
+</div>
+{% endif %}
+
+
+<!-- Expiry Alerts -->
+{% if expiry_alerts %}
+<div class="alert alert-warning shadow-sm">
+    <strong>⏰ Expiring Soon:</strong><br>
+    {% for m in expiry_alerts %}
+        {{ m.name }} (Batch {{ m.batch_no }}) – Exp: {{ m.expiry_date }}<br>
+    {% endfor %}
+</div>
+{% endif %}
+
+
+<!-- Inventory Table -->
+<div class="card shadow-sm p-3">
+
+<table class="table table-hover align-middle">
+    <thead class="table-light">
+        <tr>
+            <th>Medicine Name</th>
+            <th>Batch No</th>
+            <th>Expiry</th>
+            <th>MRP</th>
+            <th>Current Stock</th>
+            <th>Status</th>
+            <th></th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for m in medicines %}
+        <tr>
+
+            <td>
+                <strong>{{ m.name }}</strong><br>
+                <small class="text-muted">
+                    {{ m.company }} • Tablet
+                </small>
+            </td>
+
+            <td>{{ m.batch_no }}</td>
+            <td>{{ m.expiry_date }}</td>
+            <td>₹{{ m.price }}</td>
+            <td>{{ m.stock }}</td>
+
+          <td>
+              {% if m.expiry_date and m.expiry_date < today %}
+                <span class="badge bg-dark">Expired</span>
+              {% elif m.stock <= 10 %}
+                <span class="badge bg-danger">Low</span>
+              {% else %}
+                <span class="badge bg-success">Good</span>
+              {% endif %}
+          </td>
+
+            <td class="text-end">
+
+                <!-- 3-dot menu -->
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-light"
+                            data-bs-toggle="dropdown">
+                        ⋯
+                    </button>
+
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a class="dropdown-item"
+                               href="{{ url_for('edit_medicine', med_id=m.id) }}">
+                                Edit Batch
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                Adjust Stock
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="#">
+                                View History
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </td>
+
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+</div>
+
+
+
+<!-- RIGHT SIDE PANEL : ADD BATCH -->
+<div class="offcanvas offcanvas-end" tabindex="-1" id="addBatchCanvas">
+
+  <div class="offcanvas-header">
+    <h5>Add New Batch</h5>
+    <button type="button" class="btn-close"
+            data-bs-dismiss="offcanvas"></button>
+  </div>
+
+  <div class="offcanvas-body">
+
+    <form method="POST" action="{{ url_for('add_medicine') }}">
+
+      <div class="mb-3">
+        <label>Medicine Name</label>
+        <input type="text" name="name"
+               class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label>Company</label>
+        <input type="text" name="company"
+               class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label>Batch Number</label>
+        <input type="text" name="batch_no"
+               class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label>Expiry Date</label>
+        <input type="month" name="expiry_date"
+               class="form-control">
+      </div>
+
+      <div class="mb-3">
+        <label>MRP</label>
+        <input type="number" step="0.01"
+               name="price" class="form-control" required>
+      </div>
+
+      <div class="mb-3">
+        <label>Stock Quantity</label>
+        <input type="number" name="stock"
+               class="form-control" required>
+      </div>
+
+      <button class="btn btn-success w-100">
+        Save Batch
+      </button>
+
+    </form>
+
+  </div>
+</div>
+
+
+{% endblock %}
